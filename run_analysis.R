@@ -24,9 +24,9 @@ Y_bind <- rbind(Y_test, Y_train)
 colnames(Y_bind) <- "activity"
 
 
-#row binding the subject data and naming the column as "ID"
+#row binding the subject data and naming the column as "subject"
 subject_bind <- rbind(subject_test, subject_train)
-colnames(subject_bind) <- "identifierID"
+colnames(subject_bind) <- "subject"
 
 #merging all data using c bind
 final_mergeddata <- cbind(Y_bind, subject_bind, X_bind) 
@@ -36,13 +36,26 @@ MeanStd_col <- grep("mean\\(\\)|std\\(\\)", names(final_mergeddata))
 MeanSD_data <- final_mergeddata[,c(MeanStd_col)]
 
 ##3. Uses descriptive activity names to name the activities in the data set
-final_mergeddata$activityID <- activity_labels[final_mergeddata$activityID, 2]
+final_mergeddata$activity <- activity_labels[final_mergeddata$activity, 2]
 
 ##4. Appropriately labels the data set with descriptive variable names
-# t for time
-# acc for acceleration
-# Gyro for gyroscope
-# 
-
+# t to Time
+# Acc to Acceleration
+# Gyro to Gyroscope
+# f to Frequency
+# Mag to Magnitude
+# BodyBody to Body
+# tBody to TimeBody
+names(final_mergeddata) <- gsub("^t", "Time", names(final_mergeddata))
+names(final_mergeddata) <- gsub("Acc", "Acceleration", names(final_mergeddata))
+names(final_mergeddata) <- gsub("^Gyro", "Groscope", names(final_mergeddata))
+names(final_mergeddata) <- gsub("^f", "Frequency", names(final_mergeddata))
+names(final_mergeddata) <- gsub("Mag", "Magnitude", names(final_mergeddata))
+names(final_mergeddata) <- gsub("tBody", "TimeBody", names(final_mergeddata))
 
 ##5. independent tidy data set with the average of each variable for each activity and each subject
+final_mergeddata$subject <- as.factor(final_mergeddata$subject)
+final_mergeddata <- data.table(final_mergeddata)
+final_mergeddata2 <- aggregate(. ~subject + activity, final_mergeddata, mean)
+final_mergeddata2 <- final_mergeddata2[order(final_mergeddata2$subject,final_mergeddata2$activity),]
+write.table(final_mergeddata2, file = "tidydata.txt", row.names = FALSE)

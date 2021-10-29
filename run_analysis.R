@@ -36,8 +36,13 @@ MeanStd_col <- grep("mean\\(\\)|std\\(\\)", names(final_mergeddata))
 MeanSD_data <- final_mergeddata[,c(MeanStd_col)]
 
 ##3. Uses descriptive activity names to name the activities in the data set
-
+final_mergeddata$activityID <- activity_labels[final_mergeddata$activityID, 2]
 
 ##4. Appropriately labels the data set with descriptive variable names
+# t for time
+# acc for acceleration
+# Gyro for gyroscope
+# 
+
 
 ##5. independent tidy data set with the average of each variable for each activity and each subject

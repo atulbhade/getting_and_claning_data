@@ -1,5 +1,5 @@
 ### Getting and Cleaning Data Course Project
-##Coodbook.md file 
+## Coodbook.md file 
  is a code book that modifies and updates the available codebooks with the data to indicate all the variables and summaries calculated, along with units, and any other relevant information
 
 ## run_analysis.R that does the following. 

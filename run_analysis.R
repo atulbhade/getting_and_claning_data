@@ -54,6 +54,6 @@ names(final_mergeddata) <- gsub("Mag", "Magnitude", names(final_mergeddata))
 names(final_mergeddata) <- gsub("tBody", "TimeBody", names(final_mergeddata))
 
 ##5. independent tidy data set with the average of each variable for each activity and each subject
-tidydata <- MeanSD_data %>% group_by(activity, subject) %>% 
+tidydata <- final_mergeddata %>% group_by(activity, subject) %>% 
         summarise_all(funs(mean))
 write.table(tidydata, "./tidydata.txt", row.names = FALSE, quote = FALSE)

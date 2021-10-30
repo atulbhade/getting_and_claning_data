@@ -33,7 +33,7 @@ final_mergeddata <- cbind(Y_bind, subject_bind, X_bind)
 
 ##2. Extracts only the measurements on the mean and standard deviation for each measurement
 MeanStd_col <- grep("mean\\(\\)|std\\(\\)", names(final_mergeddata))
-MeanSD_data <- final_mergeddata[,c(MeanStd_col)]
+final_mergeddata <- final_mergeddata[,c(MeanStd_col, 1, 2)]
 
 ##3. Uses descriptive activity names to name the activities in the data set
 final_mergeddata$activity <- activity_labels[final_mergeddata$activity, 2]
@@ -54,8 +54,6 @@ names(final_mergeddata) <- gsub("Mag", "Magnitude", names(final_mergeddata))
 names(final_mergeddata) <- gsub("tBody", "TimeBody", names(final_mergeddata))
 
 ##5. independent tidy data set with the average of each variable for each activity and each subject
-final_mergeddata$subject <- as.factor(final_mergeddata$subject)
-final_mergeddata <- data.table(final_mergeddata)
-final_mergeddata2 <- aggregate(. ~subject + activity, final_mergeddata, mean)
-final_mergeddata2 <- final_mergeddata2[order(final_mergeddata2$subject,final_mergeddata2$activity),]
-write.table(final_mergeddata2, file = "tidydata.txt", row.names = FALSE)
+tidydata <- MeanSD_data %>% group_by(activity, subject) %>% 
+        summarise_all(funs(mean))
+write.table(tidydata, "./tidydata.txt", row.names = FALSE, quote = FALSE)
